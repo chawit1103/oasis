@@ -28,3 +28,22 @@ def test_3c_adapter_outputs_dashboard_ready_summary_with_rich_scenario():
     assert summary["headline_metrics"]["purchase_intent_events"] >= 1
     assert summary["series"]["actions_by_step"]
     assert summary["integration_contract"]["consumer"] == "3C Marketing Simulator"
+
+
+def test_3c_adapter_honors_explicit_and_omitted_platform_mix():
+    explicit = simulate_campaign_response("campaign", "product", {"name": "aud"}, ["tiktok"])
+    assert explicit.summary["platform_mix"] == ["tiktok"]
+    assert {step["platform"] for step in explicit.summary["series"]["actions_by_step"]} == {"tiktok"}
+
+    omitted = simulate_campaign_response("campaign", "product", {"name": "aud"})
+    assert omitted.summary["platform_preset"] == "marketing_default_thailand"
+    assert omitted.summary["platform_mix"] == ["line", "facebook", "tiktok", "youtube"]
+
+
+def test_3c_dashboard_signal_dictionaries_do_not_mutate_canonical_signals():
+    result = simulate_campaign_response("campaign", "product", {"name": "aud"})
+    original_score = result.recommendation_signals[0].score
+
+    result.summary["signals"]["recommendation"][0]["score"] = 999
+
+    assert result.recommendation_signals[0].score == original_score

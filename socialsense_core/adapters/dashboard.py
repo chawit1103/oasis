@@ -1,4 +1,4 @@
-from dataclasses import replace
+from dataclasses import asdict, replace
 from typing import Any, Mapping, Sequence
 
 from socialsense_core.platforms.registry import get_default_platform_registry
@@ -18,6 +18,15 @@ def resolve_platform_mix(platform_mix: str | Sequence[str] | None, default_prese
         return preset_key, [item for item in mapped.split(",") if item]
 
     return preset_key, list(raw_mix)
+
+
+def platform_for(platform_mix: Sequence[str], preferred: str) -> str | None:
+    """Return a platform from the caller-requested mix, preferring the rich preset mapping."""
+    if preferred in platform_mix:
+        return preferred
+    if platform_mix:
+        return platform_mix[0]
+    return None
 
 
 def with_dashboard_summary(
@@ -58,10 +67,10 @@ def with_dashboard_summary(
             "headline_metrics": headline_metrics,
             "series": {"actions_by_step": actions_by_step, "action_counts": action_counts},
             "signals": {
-                "recommendation": [signal.__dict__ for signal in result.recommendation_signals],
-                "diffusion": [signal.__dict__ for signal in result.diffusion_signals],
-                "opinion": [signal.__dict__ for signal in result.opinion_signals],
-                "trust": [signal.__dict__ for signal in result.trust_signals],
+                "recommendation": [asdict(signal) for signal in result.recommendation_signals],
+                "diffusion": [asdict(signal) for signal in result.diffusion_signals],
+                "opinion": [asdict(signal) for signal in result.opinion_signals],
+                "trust": [asdict(signal) for signal in result.trust_signals],
             },
             "integration_contract": {
                 "consumer": consumer,

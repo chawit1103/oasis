@@ -29,3 +29,13 @@ def test_civicsense_adapter_outputs_dashboard_ready_summary_with_rich_scenario()
     assert summary["series"]["actions_by_step"]
     assert summary["integration_contract"]["consumer"] == "CivicSense"
     assert summary["simulation_disclaimer"].startswith("Synthetic deterministic simulation")
+
+
+def test_civicsense_adapter_honors_explicit_and_omitted_platform_mix():
+    explicit = simulate_public_opinion("message", {"name": "aud"}, ["line"], "context")
+    assert explicit.summary["platform_mix"] == ["line"]
+    assert {step["platform"] for step in explicit.summary["series"]["actions_by_step"]} == {"line"}
+
+    omitted = simulate_public_opinion("message", {"name": "aud"}, scenario_context="context")
+    assert omitted.summary["platform_preset"] == "civic_default_thailand"
+    assert omitted.summary["platform_mix"] == ["line", "facebook", "tiktok", "youtube"]

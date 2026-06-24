@@ -4,7 +4,7 @@ from socialsense_core.personas.types import SocialActor, SocialContent
 from socialsense_core.simulation.context import SimulationContext
 from socialsense_core.simulation.runner import run_simulation
 
-from .dashboard import resolve_platform_mix, with_dashboard_summary
+from .dashboard import platform_for, resolve_platform_mix, with_dashboard_summary
 
 
 def _actors(audience_profile):
@@ -68,16 +68,16 @@ def demo_marketing_campaign_scenarios():
     ]
 
 
-def simulate_campaign_response(campaign_message, product_context, audience_profile, platform_mix, runtime_mode="research"):
+def simulate_campaign_response(campaign_message, product_context, audience_profile, platform_mix=None, runtime_mode="research"):
     preset_key, resolved_mix = resolve_platform_mix(platform_mix, "marketing_default_thailand")
     actions = [
-        SocialAction("post", "audience-1", "message-1", platform="facebook"),
-        SocialAction("discover_content", "audience-1", "message-1", platform="tiktok"),
-        SocialAction("watch_video", "audience-1", "message-1", platform="tiktok"),
-        SocialAction("react", "audience-1", "message-1", platform="facebook"),
-        SocialAction("view_product", "audience-1", "message-1", platform="facebook", payload={"product_context": product_context}),
-        SocialAction("purchase_intent", "audience-1", "message-1", platform="line", payload={"product_context": product_context}),
-        SocialAction("share_deal", "audience-1", "message-1", platform="line"),
+        SocialAction("post", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("discover_content", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok")),
+        SocialAction("watch_video", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok")),
+        SocialAction("react", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("view_product", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook"), payload={"product_context": product_context}),
+        SocialAction("purchase_intent", "audience-1", "message-1", platform=platform_for(resolved_mix, "line"), payload={"product_context": product_context}),
+        SocialAction("share_deal", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
     ]
     return _run(
         f"campaign response: {product_context}",
@@ -92,14 +92,14 @@ def simulate_campaign_response(campaign_message, product_context, audience_profi
     )
 
 
-def simulate_brand_sentiment(brand_message, audience_profile, platform_mix, runtime_mode="research"):
+def simulate_brand_sentiment(brand_message, audience_profile, platform_mix=None, runtime_mode="research"):
     preset_key, resolved_mix = resolve_platform_mix(platform_mix, "marketing_default_thailand")
     actions = [
-        SocialAction("post", "audience-1", "message-1", platform="facebook"),
-        SocialAction("comment", "audience-1", "message-1", platform="facebook"),
-        SocialAction("comment_video", "audience-1", "message-1", platform="tiktok"),
-        SocialAction("update_sentiment", "audience-1", "message-1", platform="facebook"),
-        SocialAction("evaluate_source_trust", "audience-1", "message-1", platform="youtube"),
+        SocialAction("post", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("comment", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("comment_video", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok")),
+        SocialAction("update_sentiment", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("evaluate_source_trust", "audience-1", "message-1", platform=platform_for(resolved_mix, "youtube")),
     ]
     return _run(
         "brand sentiment",
@@ -114,14 +114,14 @@ def simulate_brand_sentiment(brand_message, audience_profile, platform_mix, runt
     )
 
 
-def simulate_social_commerce_response(offer_message, product_context, audience_profile, platform_mix, runtime_mode="research"):
+def simulate_social_commerce_response(offer_message, product_context, audience_profile, platform_mix=None, runtime_mode="research"):
     preset_key, resolved_mix = resolve_platform_mix(platform_mix, "marketing_default_thailand")
     actions = [
-        SocialAction("view_product", "audience-1", "message-1", platform="facebook", payload={"product_context": product_context}),
-        SocialAction("ask_for_review", "audience-1", "message-1", platform="line"),
-        SocialAction("purchase_intent", "audience-1", "message-1", platform="line"),
-        SocialAction("share_deal", "audience-1", "message-1", platform="facebook"),
-        SocialAction("update_intent", "audience-1", "message-1", platform="tiktok"),
+        SocialAction("view_product", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook"), payload={"product_context": product_context}),
+        SocialAction("ask_for_review", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
+        SocialAction("purchase_intent", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
+        SocialAction("share_deal", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("update_intent", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok")),
     ]
     return _run(
         f"social commerce: {product_context}",

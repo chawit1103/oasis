@@ -4,7 +4,7 @@ from socialsense_core.personas.types import SocialActor, SocialContent
 from socialsense_core.simulation.context import SimulationContext
 from socialsense_core.simulation.runner import run_simulation
 
-from .dashboard import resolve_platform_mix, with_dashboard_summary
+from .dashboard import platform_for, resolve_platform_mix, with_dashboard_summary
 
 
 def _actors(audience_profile):
@@ -68,16 +68,16 @@ def demo_public_opinion_scenarios():
     ]
 
 
-def simulate_public_opinion(message, audience_profile, platform_mix, scenario_context, runtime_mode="research"):
+def simulate_public_opinion(message, audience_profile, platform_mix=None, scenario_context="", runtime_mode="research"):
     preset_key, resolved_mix = resolve_platform_mix(platform_mix, "civic_default_thailand")
     actions = [
-        SocialAction("post", "audience-1", "message-1", platform="facebook"),
-        SocialAction("send_message", "audience-1", "message-1", platform="line"),
-        SocialAction("react", "audience-1", "message-1", platform="facebook"),
-        SocialAction("share", "audience-1", "message-1", platform="facebook"),
-        SocialAction("watch_video", "audience-1", "message-1", platform="tiktok"),
-        SocialAction("update_sentiment", "audience-1", "message-1", platform="facebook"),
-        SocialAction("evaluate_source_trust", "audience-1", "message-1", platform="line"),
+        SocialAction("post", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("send_message", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
+        SocialAction("react", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("share", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("watch_video", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok")),
+        SocialAction("update_sentiment", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("evaluate_source_trust", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
     ]
     return _run(
         f"public opinion: {scenario_context}",
@@ -92,14 +92,14 @@ def simulate_public_opinion(message, audience_profile, platform_mix, scenario_co
     )
 
 
-def simulate_crisis_response(crisis_message, audience_profile, platform_mix, scenario_context, runtime_mode="research"):
+def simulate_crisis_response(crisis_message, audience_profile, platform_mix=None, scenario_context="", runtime_mode="research"):
     preset_key, resolved_mix = resolve_platform_mix(platform_mix, "crisis_default_thailand")
     actions = [
-        SocialAction("crisis_alert", "audience-1", "message-1", platform="line"),
-        SocialAction("rumor_spread", "audience-1", "message-1", platform="line"),
-        SocialAction("official_response", "audience-1", "message-1", platform="facebook"),
-        SocialAction("correction_spread", "audience-1", "message-1", platform="line"),
-        SocialAction("evaluate_source_trust", "audience-1", "message-1", platform="facebook"),
+        SocialAction("crisis_alert", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
+        SocialAction("rumor_spread", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
+        SocialAction("official_response", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("correction_spread", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
+        SocialAction("evaluate_source_trust", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
     ]
     return _run(
         f"crisis response: {scenario_context}",
@@ -114,14 +114,14 @@ def simulate_crisis_response(crisis_message, audience_profile, platform_mix, sce
     )
 
 
-def simulate_policy_message_diffusion(policy_message, audience_profile, platform_mix, scenario_context, runtime_mode="research"):
+def simulate_policy_message_diffusion(policy_message, audience_profile, platform_mix=None, scenario_context="", runtime_mode="research"):
     preset_key, resolved_mix = resolve_platform_mix(platform_mix, "civic_default_thailand")
     actions = [
-        SocialAction("post", "audience-1", "message-1", platform="facebook"),
-        SocialAction("expose_content", "audience-1", "message-1", platform="youtube"),
-        SocialAction("propagate_content", "audience-1", "message-1", platform="line"),
-        SocialAction("share_video", "audience-1", "message-1", platform="tiktok"),
-        SocialAction("update_belief", "audience-1", "message-1", platform="facebook"),
+        SocialAction("post", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
+        SocialAction("expose_content", "audience-1", "message-1", platform=platform_for(resolved_mix, "youtube")),
+        SocialAction("propagate_content", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
+        SocialAction("share_video", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok")),
+        SocialAction("update_belief", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
     ]
     return _run(
         f"policy diffusion: {scenario_context}",

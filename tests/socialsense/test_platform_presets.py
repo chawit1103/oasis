@@ -27,6 +27,8 @@ def test_thai_platform_mix_presets_are_registered_and_named_for_verticals():
     marketing = registry.get("marketing_default_thailand")
     assert "social_commerce" in marketing.behavior_modules
     assert "purchase_intent" in marketing.actions
+    for adapter_action in ("react", "comment", "comment_video", "evaluate_source_trust", "update_sentiment"):
+        assert adapter_action in marketing.actions
 
     crisis = registry.get("crisis_default_thailand")
     assert "crisis_spread" in crisis.behavior_modules

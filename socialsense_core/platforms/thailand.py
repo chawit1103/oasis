@@ -52,6 +52,9 @@ MARKETING_DEFAULT_THAILAND = SocialPlatformPreset(
     ),
     actions=(
         "post",
+        "react",
+        "comment",
+        "comment_video",
         "discover_content",
         "watch_video",
         "like_video",
@@ -62,6 +65,8 @@ MARKETING_DEFAULT_THAILAND = SocialPlatformPreset(
         "ask_for_review",
         "purchase_intent",
         "share_deal",
+        "evaluate_source_trust",
+        "update_sentiment",
         "update_intent",
     ),
     recommendation_signals=("watch_time", "creator_affinity", "topic_affinity", "marketplace_intent"),
