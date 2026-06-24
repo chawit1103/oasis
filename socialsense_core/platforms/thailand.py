@@ -82,6 +82,42 @@ MARKETING_DEFAULT_THAILAND = SocialPlatformPreset(
 )
 
 
+COMMERCE_DEFAULT_THAILAND = SocialPlatformPreset(
+    key="commerce_default_thailand",
+    display_name="Commerce default Thailand",
+    behavior_modules=(
+        "private_messaging",
+        "public_feed",
+        "short_video",
+        "influencer_network",
+        "recommendation",
+        "social_commerce",
+        "opinion_formation",
+        "trust_credibility",
+    ),
+    actions=(
+        "send_message",
+        "post",
+        "react",
+        "comment",
+        "discover_content",
+        "watch_video",
+        "view_product",
+        "ask_for_review",
+        "purchase_intent",
+        "share_deal",
+        "update_intent",
+        "evaluate_source_trust",
+    ),
+    recommendation_signals=("marketplace_intent", "creator_affinity", "review_request", "deal_share_rate"),
+    context_notes=(
+        "Synthetic Thai social-commerce mix for LINE review prompts, Facebook deal sharing, TikTok purchase intent, and YouTube trust context.",
+        "Designed for dashboard-ready commerce simulations without real inventory, payment, ads, or platform APIs.",
+    ),
+    oasis_mapping={"platform_mix": ",".join(THAI_PLATFORM_MIX), "vertical": "social_commerce"},
+)
+
+
 CRISIS_DEFAULT_THAILAND = SocialPlatformPreset(
     key="crisis_default_thailand",
     display_name="Crisis default Thailand",
@@ -115,4 +151,4 @@ CRISIS_DEFAULT_THAILAND = SocialPlatformPreset(
 )
 
 
-THAI_PRESETS = (CIVIC_DEFAULT_THAILAND, MARKETING_DEFAULT_THAILAND, CRISIS_DEFAULT_THAILAND)
+THAI_PRESETS = (CIVIC_DEFAULT_THAILAND, MARKETING_DEFAULT_THAILAND, CRISIS_DEFAULT_THAILAND, COMMERCE_DEFAULT_THAILAND)

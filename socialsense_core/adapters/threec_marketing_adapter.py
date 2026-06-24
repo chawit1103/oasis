@@ -115,7 +115,7 @@ def simulate_brand_sentiment(brand_message, audience_profile, platform_mix=None,
 
 
 def simulate_social_commerce_response(offer_message, product_context, audience_profile, platform_mix=None, runtime_mode="research"):
-    preset_key, resolved_mix = resolve_platform_mix(platform_mix, "marketing_default_thailand")
+    preset_key, resolved_mix = resolve_platform_mix(platform_mix, "commerce_default_thailand")
     actions = [
         SocialAction("view_product", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook"), payload={"product_context": product_context}),
         SocialAction("ask_for_review", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
