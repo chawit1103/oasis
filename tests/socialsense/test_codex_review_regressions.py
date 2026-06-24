@@ -1,6 +1,7 @@
 from socialsense_core import RuntimeMode, SocialAction, SocialActor, SocialContent
 from socialsense_core.actions.registry import get_default_action_registry
 from socialsense_core.behaviors.registry import get_default_behavior_registry
+from socialsense_core.platforms.registry import get_default_platform_registry
 from socialsense_core.recommendation.heuristics import diffusion_heuristic, recommendation_heuristic, trust_heuristic
 from socialsense_core.simulation.context import SimulationContext
 from socialsense_core.simulation.runner import run_simulation
@@ -157,3 +158,27 @@ def test_runner_rejects_unknown_actor_and_content_references():
         run_simulation(missing_actor_context)
     with pytest.raises(ValueError, match="unknown content"):
         run_simulation(missing_content_context)
+
+
+def test_short_video_advertises_emitted_signal_families():
+    short_video = get_default_behavior_registry().get("short_video")
+
+    assert short_video.signals == (
+        "RecommendationSignal",
+        "DiffusionSignal",
+        "OpinionSignal",
+    )
+
+
+def test_reddit_oasis_mapping_preserves_reaction_polarity():
+    reddit = get_default_platform_registry().get("reddit")
+
+    assert reddit.oasis_mapping["LIKE_POST"] == "react:positive"
+    assert reddit.oasis_mapping["DISLIKE_POST"] == "react:negative"
+
+
+def test_community_post_topics_create_recommendation_signals():
+    signals = recommendation_heuristic([SocialAction("post_topic", "a1", "topic-1")])
+
+    assert signals[0].content_id == "topic-1"
+    assert signals[0].score > 0

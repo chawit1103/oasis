@@ -6,5 +6,5 @@ MODULE = SocialBehaviorModule(
     name="Short Video",
     actions=tuple(ACTION_DEFINITIONS["short_video"]),
     description="Reusable behavior module for short video simulations.",
-    signals=(),
+    signals=("RecommendationSignal", "DiffusionSignal", "OpinionSignal"),
 )

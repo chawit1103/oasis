@@ -4,7 +4,7 @@ from socialsense_core.actions.types import SocialAction
 from .base import DiffusionSignal, OpinionSignal, RecommendationSignal, TrustSignal
 
 ENGAGEMENT_WEIGHTS = {
-    "post": 1.0, "comment": 0.5, "reply": 0.45, "react": 0.3, "share": 0.8, "follow": 0.4,
+    "post": 1.0, "post_topic": 0.9, "comment": 0.5, "reply": 0.45, "react": 0.3, "share": 0.8, "follow": 0.4,
     "watch_video": 0.5, "skip_video": -0.2, "like_video": 0.4, "share_video": 0.8, "subscribe_channel": 0.6,
     "watch_long_video": 0.6, "comment_video": 0.5,
     "propagate_content": 1.0, "rumor_spread": 0.9, "official_response": 0.7, "correction_spread": 0.7,
