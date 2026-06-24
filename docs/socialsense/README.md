@@ -10,6 +10,9 @@ This directory contains the SocialSense research and architecture baseline for t
 - `DASHBOARD_OUTPUT_CONTRACT.md` — PR #3 reusable dashboard output contract for CivicSense and 3C.
 - `SCENARIO_PACKS.md` — PR #3 deterministic scenario packs for civic, crisis, marketing, brand sentiment, and social commerce use cases.
 - `NEXT_INTEGRATION_STEPS.md` — PR #3 future integration plan for downstream CivicSense and 3C repos.
+- `PACKAGE_BOUNDARY_AND_PUBLIC_API.md` — PR #4 stable public API and package boundary for external consumers.
+- `EXTERNAL_CONSUMER_GUIDE.md` — PR #4 compatibility and import guidance for CivicSense, 3C, and future apps.
+- `CHANGELOG.md` — SocialSense Core changelog starting with the `0.1.0` public boundary.
 
 ## Architecture stance
 
