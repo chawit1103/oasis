@@ -34,6 +34,7 @@ def test_civicsense_adapter_outputs_dashboard_ready_summary_with_rich_scenario()
 def test_civicsense_adapter_honors_explicit_and_omitted_platform_mix():
     explicit = simulate_public_opinion("message", {"name": "aud"}, ["line"], "context")
     assert explicit.summary["platform_mix"] == ["line"]
+    assert explicit.summary["platform_preset"] == "custom_platform_mix"
     assert {step["platform"] for step in explicit.summary["series"]["actions_by_step"]} == {"line"}
 
     omitted = simulate_public_opinion("message", {"name": "aud"}, scenario_context="context")

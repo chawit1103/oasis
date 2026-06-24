@@ -76,8 +76,8 @@ def simulate_campaign_response(campaign_message, product_context, audience_profi
         SocialAction("watch_video", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok")),
         SocialAction("react", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
         SocialAction("view_product", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook"), payload={"product_context": product_context}),
-        SocialAction("purchase_intent", "audience-1", "message-1", platform=platform_for(resolved_mix, "line"), payload={"product_context": product_context}),
-        SocialAction("share_deal", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
+        SocialAction("purchase_intent", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok"), payload={"product_context": product_context}),
+        SocialAction("share_deal", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
     ]
     return _run(
         f"campaign response: {product_context}",
@@ -119,7 +119,7 @@ def simulate_social_commerce_response(offer_message, product_context, audience_p
     actions = [
         SocialAction("view_product", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook"), payload={"product_context": product_context}),
         SocialAction("ask_for_review", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
-        SocialAction("purchase_intent", "audience-1", "message-1", platform=platform_for(resolved_mix, "line")),
+        SocialAction("purchase_intent", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok")),
         SocialAction("share_deal", "audience-1", "message-1", platform=platform_for(resolved_mix, "facebook")),
         SocialAction("update_intent", "audience-1", "message-1", platform=platform_for(resolved_mix, "tiktok")),
     ]

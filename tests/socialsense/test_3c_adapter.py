@@ -33,11 +33,15 @@ def test_3c_adapter_outputs_dashboard_ready_summary_with_rich_scenario():
 def test_3c_adapter_honors_explicit_and_omitted_platform_mix():
     explicit = simulate_campaign_response("campaign", "product", {"name": "aud"}, ["tiktok"])
     assert explicit.summary["platform_mix"] == ["tiktok"]
+    assert explicit.summary["platform_preset"] == "custom_platform_mix"
     assert {step["platform"] for step in explicit.summary["series"]["actions_by_step"]} == {"tiktok"}
 
     omitted = simulate_campaign_response("campaign", "product", {"name": "aud"})
     assert omitted.summary["platform_preset"] == "marketing_default_thailand"
     assert omitted.summary["platform_mix"] == ["line", "facebook", "tiktok", "youtube"]
+    platform_by_action = {step["action"]: step["platform"] for step in omitted.summary["series"]["actions_by_step"]}
+    assert platform_by_action["purchase_intent"] == "tiktok"
+    assert platform_by_action["share_deal"] == "facebook"
 
 
 def test_3c_dashboard_signal_dictionaries_do_not_mutate_canonical_signals():

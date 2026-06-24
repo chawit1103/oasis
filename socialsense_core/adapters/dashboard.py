@@ -17,7 +17,7 @@ def resolve_platform_mix(platform_mix: str | Sequence[str] | None, default_prese
         mapped = preset.oasis_mapping.get("platform_mix", raw_mix)
         return preset_key, [item for item in mapped.split(",") if item]
 
-    return preset_key, list(raw_mix)
+    return "custom_platform_mix", list(raw_mix)
 
 
 def platform_for(platform_mix: Sequence[str], preferred: str) -> str | None:

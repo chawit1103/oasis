@@ -13,6 +13,7 @@ CIVIC_DEFAULT_THAILAND = SocialPlatformPreset(
         "community_group",
         "information_diffusion",
         "opinion_formation",
+        "short_video",
         "trust_credibility",
     ),
     actions=(
@@ -20,6 +21,8 @@ CIVIC_DEFAULT_THAILAND = SocialPlatformPreset(
         "comment",
         "react",
         "share",
+        "watch_video",
+        "share_video",
         "send_message",
         "forward_message",
         "join_group",
@@ -49,6 +52,7 @@ MARKETING_DEFAULT_THAILAND = SocialPlatformPreset(
         "recommendation",
         "social_commerce",
         "opinion_formation",
+        "trust_credibility",
     ),
     actions=(
         "post",
