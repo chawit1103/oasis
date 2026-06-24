@@ -1,28 +1,46 @@
-from collections import Counter
+from collections import Counter, defaultdict
 
 from socialsense_core.actions.types import SocialAction
 from .base import DiffusionSignal, OpinionSignal, RecommendationSignal, TrustSignal
 
 ENGAGEMENT_WEIGHTS = {
     "post": 1.0, "comment": 0.5, "reply": 0.45, "react": 0.3, "share": 0.8, "follow": 0.4,
-    "watch_video": 0.5, "like_video": 0.4, "share_video": 0.8, "subscribe_channel": 0.6,
+    "watch_video": 0.5, "skip_video": -0.2, "like_video": 0.4, "share_video": 0.8, "subscribe_channel": 0.6,
     "propagate_content": 1.0, "rumor_spread": 0.9, "official_response": 0.7, "correction_spread": 0.7,
-    "purchase_intent": 0.6, "view_product": 0.2,
+    "decay_attention": -0.2, "purchase_intent": 0.6, "view_product": 0.2,
+}
+
+TARGET_ONLY_ACTIONS = {
+    "follow", "follow_creator", "follow_influencer", "subscribe_channel",
+    "trust_influencer", "evaluate_source_trust", "update_trust_score",
 }
 
 
+def _content_signal_id(action: SocialAction) -> str | None:
+    if action.content_id:
+        return action.content_id
+    payload_content_id = action.payload.get("content_id")
+    if payload_content_id:
+        return str(payload_content_id)
+    if action.target_id and action.action_type not in TARGET_ONLY_ACTIONS:
+        return action.target_id
+    return None
+
+
 def recommendation_heuristic(actions: list[SocialAction]) -> list[RecommendationSignal]:
-    scores: Counter[str] = Counter()
+    scores: defaultdict[str, float] = defaultdict(float)
     for action in actions:
-        content_id = action.content_id or action.target_id or action.payload.get("content_id") or "scenario"
-        scores[str(content_id)] += ENGAGEMENT_WEIGHTS.get(action.action_type, 0.1)
+        content_id = _content_signal_id(action)
+        if content_id is None:
+            continue
+        scores[content_id] += ENGAGEMENT_WEIGHTS.get(action.action_type, 0.1)
     return [RecommendationSignal(content_id=k, score=round(v, 4), reason="deterministic engagement-weight heuristic") for k, v in sorted(scores.items())]
 
 
 def diffusion_heuristic(actions: list[SocialAction]) -> list[DiffusionSignal]:
     out = []
     for signal in recommendation_heuristic(actions):
-        share_count = sum(1 for a in actions if (a.content_id or a.target_id or a.payload.get("content_id") or "scenario") == signal.content_id and a.action_type in {"share", "share_video", "forward_message", "propagate_content", "rumor_spread"})
+        share_count = sum(1 for a in actions if _content_signal_id(a) == signal.content_id and a.action_type in {"share", "share_video", "forward_message", "propagate_content", "rumor_spread"})
         out.append(DiffusionSignal(signal.content_id, reach=round(signal.score * (1 + share_count), 4), velocity=round(0.1 + share_count * 0.2, 4), reason="reach = engagement score multiplied by propagation actions"))
     return out
 

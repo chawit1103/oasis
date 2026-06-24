@@ -32,7 +32,7 @@ ACTION_DEFINITIONS = {
     "short_video": SHORT_VIDEO_ACTIONS,
     "long_form_video": LONG_FORM_VIDEO_ACTIONS,
     "influencer_network": INFLUENCER_NETWORK_ACTIONS,
-    "recommendation_discovery": RECOMMENDATION_ACTIONS,
+    "recommendation": RECOMMENDATION_ACTIONS,
     "information_diffusion": INFORMATION_DIFFUSION_ACTIONS,
     "opinion_formation": OPINION_FORMATION_ACTIONS,
     "trust_credibility": TRUST_CREDIBILITY_ACTIONS,
