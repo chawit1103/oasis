@@ -1,7 +1,15 @@
 from .base import SocialPlatformPreset
-from . import x_twitter, reddit, line, facebook, tiktok, youtube
+from . import x_twitter, reddit, line, facebook, tiktok, youtube, thailand
 
-DEFAULT_PRESETS = (x_twitter.PRESET, reddit.PRESET, line.PRESET, facebook.PRESET, tiktok.PRESET, youtube.PRESET)
+DEFAULT_PRESETS = (
+    x_twitter.PRESET,
+    reddit.PRESET,
+    line.PRESET,
+    facebook.PRESET,
+    tiktok.PRESET,
+    youtube.PRESET,
+    *thailand.THAI_PRESETS,
+)
 
 
 class PlatformPresetRegistry:

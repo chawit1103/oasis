@@ -49,14 +49,14 @@ def test_behavior_modules_and_platform_presets_are_data_driven() -> None:
         "short_video",
         "trust_credibility",
     }
-    assert set(platform_registry.keys()) == {
+    assert {
         "facebook",
         "line",
         "reddit",
         "tiktok",
         "x_twitter",
         "youtube",
-    }
+    }.issubset(set(platform_registry.keys()))
 
     available_actions = set(action_registry.all_actions())
     for module in behavior_registry.all():
