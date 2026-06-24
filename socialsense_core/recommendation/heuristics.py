@@ -33,15 +33,19 @@ def recommendation_heuristic(actions: list[SocialAction]) -> list[Recommendation
         content_id = _content_signal_id(action)
         if content_id is None:
             continue
-        scores[content_id] += ENGAGEMENT_WEIGHTS.get(action.action_type, 0.1)
-    return [RecommendationSignal(content_id=k, score=round(v, 4), reason="deterministic engagement-weight heuristic") for k, v in sorted(scores.items())]
+        weight = ENGAGEMENT_WEIGHTS.get(action.action_type, 0.0)
+        if weight == 0.0:
+            continue
+        scores[content_id] += weight
+    return [RecommendationSignal(content_id=k, score=round(v, 4), reason="deterministic engagement-weight heuristic") for k, v in sorted(scores.items()) if v > 0]
 
 
 def diffusion_heuristic(actions: list[SocialAction]) -> list[DiffusionSignal]:
     out = []
     for signal in recommendation_heuristic(actions):
         share_count = sum(1 for a in actions if _content_signal_id(a) == signal.content_id and a.action_type in {"share", "share_video", "forward_message", "propagate_content", "rumor_spread"})
-        out.append(DiffusionSignal(signal.content_id, reach=round(signal.score * (1 + share_count), 4), velocity=round(0.1 + share_count * 0.2, 4), reason="reach = engagement score multiplied by propagation actions"))
+        reach = max(signal.score, 0.0) * (1 + share_count)
+        out.append(DiffusionSignal(signal.content_id, reach=round(reach, 4), velocity=round(0.1 + share_count * 0.2, 4), reason="reach = non-negative engagement score multiplied by propagation actions"))
     return out
 
 

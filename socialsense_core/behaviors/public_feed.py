@@ -6,5 +6,5 @@ MODULE = SocialBehaviorModule(
     name="Public Feed",
     actions=tuple(ACTION_DEFINITIONS["public_feed"]),
     description="Reusable behavior module for public feed simulations.",
-    signals=(),
+    signals=("RecommendationSignal", "DiffusionSignal", "OpinionSignal"),
 )
