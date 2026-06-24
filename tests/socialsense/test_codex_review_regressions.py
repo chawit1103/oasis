@@ -1,7 +1,7 @@
 from socialsense_core import RuntimeMode, SocialAction, SocialActor, SocialContent
 from socialsense_core.actions.registry import get_default_action_registry
 from socialsense_core.behaviors.registry import get_default_behavior_registry
-from socialsense_core.recommendation.heuristics import diffusion_heuristic, recommendation_heuristic
+from socialsense_core.recommendation.heuristics import diffusion_heuristic, recommendation_heuristic, trust_heuristic
 from socialsense_core.simulation.context import SimulationContext
 from socialsense_core.simulation.runner import run_simulation
 
@@ -103,3 +103,57 @@ def test_unweighted_neutral_actions_do_not_create_recommendation_signals():
 
     assert recommendation_heuristic(actions) == []
     assert diffusion_heuristic(actions) == []
+
+
+def test_forward_message_creates_diffusion_signal():
+    actions = [SocialAction("forward_message", "a1", "content-1")]
+
+    diffusion = diffusion_heuristic(actions)
+
+    assert diffusion[0].content_id == "content-1"
+    assert diffusion[0].reach > 0
+
+
+def test_long_form_video_actions_create_recommendation_signals():
+    signals = recommendation_heuristic(
+        [
+            SocialAction("watch_long_video", "a1", "video-1"),
+            SocialAction("comment_video", "a1", "video-1"),
+        ]
+    )
+
+    assert signals[0].content_id == "video-1"
+    assert signals[0].score > 0
+
+
+def test_update_trust_score_emits_trust_signal():
+    signals = trust_heuristic([SocialAction("update_trust_score", "a1", target_id="source-1")])
+
+    assert signals[0].actor_id == "a1"
+    assert signals[0].trust_delta > 0
+
+
+def test_runner_rejects_unknown_actor_and_content_references():
+    import pytest
+
+    valid_actor = SocialActor("a1", "Actor")
+    valid_content = SocialContent("c1", "Content")
+    missing_actor_context = SimulationContext.build(
+        scenario="missing actor",
+        actors=[valid_actor],
+        content=[valid_content],
+        platform_mix=["line"],
+        actions=[SocialAction("post", "missing-actor", "c1")],
+    )
+    missing_content_context = SimulationContext.build(
+        scenario="missing content",
+        actors=[valid_actor],
+        content=[valid_content],
+        platform_mix=["line"],
+        actions=[SocialAction("post", "a1", "missing-content")],
+    )
+
+    with pytest.raises(ValueError, match="unknown actor"):
+        run_simulation(missing_actor_context)
+    with pytest.raises(ValueError, match="unknown content"):
+        run_simulation(missing_content_context)

@@ -6,8 +6,9 @@ from .base import DiffusionSignal, OpinionSignal, RecommendationSignal, TrustSig
 ENGAGEMENT_WEIGHTS = {
     "post": 1.0, "comment": 0.5, "reply": 0.45, "react": 0.3, "share": 0.8, "follow": 0.4,
     "watch_video": 0.5, "skip_video": -0.2, "like_video": 0.4, "share_video": 0.8, "subscribe_channel": 0.6,
+    "watch_long_video": 0.6, "comment_video": 0.5,
     "propagate_content": 1.0, "rumor_spread": 0.9, "official_response": 0.7, "correction_spread": 0.7,
-    "decay_attention": -0.2, "purchase_intent": 0.6, "view_product": 0.2,
+    "forward_message": 0.7, "decay_attention": -0.2, "purchase_intent": 0.6, "view_product": 0.2,
 }
 
 TARGET_ONLY_ACTIONS = {
@@ -62,7 +63,7 @@ def opinion_update_heuristic(actions: list[SocialAction]) -> list[OpinionSignal]
 def trust_heuristic(actions: list[SocialAction]) -> list[TrustSignal]:
     by_actor: Counter[str] = Counter()
     for a in actions:
-        if a.action_type in {"evaluate_source_trust", "trust_influencer", "official_response", "correction_spread"}:
+        if a.action_type in {"evaluate_source_trust", "update_trust_score", "trust_influencer", "official_response", "correction_spread"}:
             by_actor[a.actor_id] += 1
         if a.action_type in {"rumor_spread"}:
             by_actor[a.actor_id] -= 1

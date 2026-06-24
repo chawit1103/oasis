@@ -1,7 +1,7 @@
 # Quickstart
 
 ```bash
-cd /Users/chawit/Projects/oasis-socialsense-research
+# From the repository root after cloning your fork
 python3 -m pytest tests/socialsense -q
 python3 examples/socialsense_thai_platform_mix_demo.py
 ```

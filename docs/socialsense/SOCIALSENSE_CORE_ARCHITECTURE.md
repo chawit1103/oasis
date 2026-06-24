@@ -176,7 +176,7 @@ Default modules:
 - `short_video`
 - `long_form_video`
 - `influencer_network`
-- `recommendation_discovery`
+- `recommendation`
 - `information_diffusion`
 - `opinion_formation`
 - `trust_credibility`
