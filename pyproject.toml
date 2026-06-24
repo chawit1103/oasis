@@ -18,6 +18,7 @@ keywords = [
 ]
 packages = [
     { include = "oasis" },
+    { include = "socialsense_core" },
 ]
 repository = "https://github.com/camel-ai/oasis.git"
 
